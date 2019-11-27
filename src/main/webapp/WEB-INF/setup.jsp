@@ -5,9 +5,7 @@
     The ASF licenses this file to You under the Apache License, Version 2.0
     (the "License"); you may not use this file except in compliance with
     the License.  You may obtain a copy of the License at
-
        http://www.apache.org/licenses/LICENSE-2.0
-
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,25 +13,14 @@
     limitations under the License.
 --%>
 <%@ page import=" org.superbiz.moviefun.Movie" %>
-<%@ page import="org.superbiz.moviefun.MoviesBean" %>
+
 <%@ page import="javax.naming.InitialContext" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.List" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%
-  InitialContext initialContext = new InitialContext();
-  MoviesBean moviesBean = (MoviesBean) initialContext.lookup("java:comp/env/org.superbiz.moviefun.ActionServlet/moviesBean");
 
-  moviesBean.addMovie(new Movie("Wedding Crashers", "David Dobkin", "Comedy", 7, 2005));
-  moviesBean.addMovie(new Movie("Starsky & Hutch", "Todd Phillips", "Action", 6, 2004));
-  moviesBean.addMovie(new Movie("Shanghai Knights", "David Dobkin", "Action", 6, 2003));
-  moviesBean.addMovie(new Movie("I-Spy", "Betty Thomas", "Adventure", 5, 2002));
-  moviesBean.addMovie(new Movie("The Royal Tenenbaums", "Wes Anderson", "Comedy", 8, 2001));
-  moviesBean.addMovie(new Movie("Zoolander", "Ben Stiller", "Comedy", 6, 2001));
-  moviesBean.addMovie(new Movie("Shanghai Noon", "Tom Dey", "Comedy", 7, 2000));
-%>
 <c:set var="language" value="${pageContext.request.locale}"/>
 <fmt:setLocale value="${language}"/>
 
@@ -84,23 +71,13 @@
       <td><b>Director</b></td>
       <td><b>Genre</b></td>
     </tr>
-    <%
-      List<Movie> movies = moviesBean.getMovies();
-      for (Iterator<Movie> iterator = movies.iterator(); iterator.hasNext(); ) {
-        Movie movie = (Movie) iterator.next();
-    %>
-    <tr>
-      <td><%=movie.getTitle()%>
-      </td>
-      <td><%=movie.getDirector()%>
-      </td>
-      <td><%=movie.getGenre()%>
-      </td>
-    </tr>
-
-    <%
-      }
-    %>
+        <c:forEach items="${requestScope.movies}" var="movie">
+          <tr>
+            <td>${ movie.title }</td>
+            <td>${ movie.director }</td>
+            <td>${ movie.genre }</td>
+          </tr>
+        </c:forEach>
   </table>
 
   <h2>Continue</h2>
